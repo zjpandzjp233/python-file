@@ -1,0 +1,69 @@
+import timeit
+import os
+import platform
+
+operating_system = platform.system() 
+def clear_console():
+    # 获取操作系统类型
+    # 根据操作系统类型选择清屏命令
+    if operating_system == "Windows":
+        os.system("cls") 
+    elif operating_system in ["Linux", "Darwin"]:  # Darwin 是 macOS 的内核名称
+        os.system("clear") 
+    else:
+        print("不支持的操作系统")
+
+path=input("请先输入你需要统计关键词出现次数的文本路径(可包含\"\"哦):")
+path=path.strip()
+path=path.strip('"')
+clear_console()# 调用清屏函数
+print(f"已经输入文本路径：{path}")
+print()
+target=input("请先输入你需要查找的文字，我将告诉其在文本出现的次数:")
+clear_console()
+def find_target():
+    t_len=len(target)
+    str1="空"
+    index=0
+    result=0
+    with open(path,"r",encoding="UTF-8") as f:
+        while 1==1:
+            str1=f.read(1)
+            if str1=="":
+                break
+            if str1==target[index]:
+                index+=1
+                if index==t_len:
+                    result+=1
+                    index=0
+                else:
+                    while 1==1:
+                        str1=f.read(1)
+                        if str1==target[index]:
+                            index+=1
+                        else:
+                            index=0
+                            break
+                        if index==t_len:
+                            result+=1
+                            index=0
+                            break
+        print(f"关键字:{target}")
+        print(f"一共出现 {target} 关键字 {result} 次。")
+
+number_of_runs=1
+stmt = f'find_target()'
+setup = 'from __main__ import find_target'
+    # 使用 timeit 模块进行计时
+elapsed_time = timeit.timeit(stmt=stmt,  setup=setup, number=number_of_runs)
+
+    # 计算平均耗时
+average_time = elapsed_time / number_of_runs 
+print(f"查找关键字的平均耗时：{average_time:.10f} 秒")
+
+print()
+if_=input("输入1查看源代码：")
+if if_=="1":
+    clear_console()
+    f=open(__file__,"r",encoding="UTF-8")
+    print(f.read())
